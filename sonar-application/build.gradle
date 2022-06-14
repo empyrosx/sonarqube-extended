@@ -63,6 +63,7 @@ dependencies {
     compile project(':server:sonar-webserver')
     compile project(':sonar-core')
     compile project(':sonar-plugin-api-impl')
+    compile project(':sonar-branch-server-plugin')
 
     compileOnly 'com.google.code.findbugs:jsr305'
 
@@ -236,7 +237,7 @@ zip.doFirst {
 // Check the size of the archive
 zip.doLast {
   def minLength = 272000000
-  def maxLength = 330000000
+  def maxLength = 340000000
 
   def length = archiveFile.get().asFile.length()
   if (length < minLength)

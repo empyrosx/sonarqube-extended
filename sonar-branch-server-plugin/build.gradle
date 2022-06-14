@@ -1,0 +1,36 @@
+sonarqube {
+  properties {
+    property 'sonar.projectName', "${projectTitle} :: Branch Plugin Implementation"
+  }
+}
+
+dependencies {
+  // please keep the list grouped by configuration and ordered by name
+  compile project(':sonar-core')
+  compile project(':server:sonar-db-dao')
+  compile project(':server:sonar-ce-task-projectanalysis')
+  compile project(':server:sonar-webserver-api')
+  compile project(':server:sonar-webserver-webapi')
+  compile group: 'org.gitlab', name: 'java-gitlab-api', version: '4.1.1'
+}
+
+import org.apache.tools.ant.filters.ReplaceTokens
+processResources {
+  filter ReplaceTokens, tokens: [
+          'project.version': project.version
+  ]
+}
+
+artifactoryPublish.skip = false
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+      if (release) {
+        artifact sourcesJar
+        artifact javadocJar
+      }
+    }
+  }
+}
