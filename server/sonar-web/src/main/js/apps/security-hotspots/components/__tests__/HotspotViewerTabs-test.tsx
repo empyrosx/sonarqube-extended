@@ -20,9 +20,10 @@
 import { mount, shallow } from 'enzyme';
 import * as React from 'react';
 import BoxedTabs, { BoxedTabsProps } from '../../../../components/controls/BoxedTabs';
-import { KeyboardCodes } from '../../../../helpers/keycodes';
+import { KeyboardKeys } from '../../../../helpers/keycodes';
 import { mockHotspot, mockHotspotRule } from '../../../../helpers/mocks/security-hotspots';
-import { mockEvent, mockUser } from '../../../../helpers/testMocks';
+import { mockUser } from '../../../../helpers/testMocks';
+import { mockEvent } from '../../../../helpers/testUtils';
 import HotspotViewerTabs, { TabKeys } from '../HotspotViewerTabs';
 
 const originalAddEventListener = window.addEventListener;
@@ -145,13 +146,13 @@ describe('keyboard navigation', () => {
   const wrapper = shallowRender();
 
   it.each([
-    ['selecting next', 0, KeyboardCodes.RightArrow, 1],
-    ['selecting previous', 1, KeyboardCodes.LeftArrow, 0],
-    ['selecting previous, non-existent', 0, KeyboardCodes.LeftArrow, 0],
-    ['selecting next, non-existent', 3, KeyboardCodes.RightArrow, 3]
-  ])('should work when %s', (_, start, code, expected) => {
+    ['selecting next', 0, KeyboardKeys.RightArrow, 1],
+    ['selecting previous', 1, KeyboardKeys.LeftArrow, 0],
+    ['selecting previous, non-existent', 0, KeyboardKeys.LeftArrow, 0],
+    ['selecting next, non-existent', 3, KeyboardKeys.RightArrow, 3]
+  ])('should work when %s', (_, start, key, expected) => {
     wrapper.setState({ currentTab: wrapper.state().tabs[start] });
-    wrapper.instance().handleKeyboardNavigation(mockEvent({ code }));
+    wrapper.instance().handleKeyboardNavigation(mockEvent({ key }));
 
     expect(wrapper.state().currentTab.key).toBe(tabList[expected]);
   });
@@ -165,7 +166,7 @@ it("shouldn't navigate when ctrl or command are pressed with up and down", () =>
   wrapper.setState({ currentTab: wrapper.state().tabs[0] });
   wrapper
     .instance()
-    .handleKeyboardNavigation(mockEvent({ code: KeyboardCodes.LeftArrow, metaKey: true }));
+    .handleKeyboardNavigation(mockEvent({ key: KeyboardKeys.LeftArrow, metaKey: true }));
 
   expect(wrapper.state().currentTab.key).toBe(TabKeys.Code);
 });
